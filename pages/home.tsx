@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Image, FlatList } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Image, FlatList, StatusBar } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import SystemNavigationBar from 'react-native-system-navigation-bar';
 import { 
   Search, 
   MapPin, 
-  Clock, 
-  DollarSign, 
+  Clock,  
   Star, 
   Filter, 
   Briefcase, 
@@ -18,51 +18,59 @@ import {
   TrendingUp
 } from 'lucide-react-native';
 
-const HomeScreen = () => {
-  const [activeTab, setActiveTab] = useState<'jobs' | 'clients'>('jobs');
+
+export default function Home() {
+  const [jobsTab, setJobsTab] = useState<'jobs' | 'clients'>('jobs');
   const [searchQuery, setSearchQuery] = useState('');
+
+  React.useEffect(() => {
+    // Set navigation bar color to match the gradient
+    SystemNavigationBar.setNavigationColor('#8b5cf6');
+    SystemNavigationBar.leanBack();
+  }, []);
+
 
   // Mock data for jobs
   const jobs = [
     {
       id: '1',
-      title: 'Plumbing Repair',
-      client: 'Sarah Johnson',
-      location: 'Downtown, NY',
-      budget: '$120',
+      title: 'Mechanical Repair',
+      client: 'Mark Daluson',
+      location: 'Batangas City, PH',
+      budget: '₱1,500',
       time: '2 hours ago',
       rating: 4.8,
-      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dXNlcnxlbnwwfHwwfHx8MA%3D%3D',
+      avatar: 'https://i.sstatic.net/l60Hf.png',
     },
     {
       id: '2',
-      title: 'Electrical Installation',
-      client: 'Tech Solutions Inc',
-      location: 'Midtown, NY',
-      budget: '$350',
+      title: 'Driver',
+      client: 'Juan Dela Cruz',
+      location: 'Antipolo City, PH',
+      budget: '₱2,500',
       time: '5 hours ago',
       rating: 4.6,
-      avatar: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTF8fHVzZXJ8ZW58MHx8MHx8fDA%3D',
+      avatar: 'https://i.sstatic.net/l60Hf.png',
     },
     {
       id: '3',
-      title: 'HVAC Maintenance',
-      client: 'Robert Chen',
-      location: 'Brooklyn, NY',
-      budget: '$220',
+      title: 'Mechanical Repair',
+      client: 'Marvin Alingasa',
+      location: 'Baguio City, PH',
+      budget: '₱2,500',
       time: '1 day ago',
       rating: 4.9,
-      avatar: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mjh8fHVzZXJ8ZW58MHx8MHx8fDA%3D',
+      avatar: 'https://i.sstatic.net/l60Hf.png',
     },
     {
       id: '4',
-      title: 'Drywall Repair',
-      client: 'Maria Garcia',
-      location: 'Queens, NY',
-      budget: '$180',
+      title: 'Plumbers',
+      client: 'Juan Miguel Barbosa',
+      location: 'Cebu City, PH',
+      budget: '₱7,500',
       time: '1 day ago',
       rating: 4.7,
-      avatar: 'https://images.unsplash.com/photo-1605993439219-9d09d2020fa5?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTN8fHVzZXJ8ZW58MHx8MHx8fDA%3D',
+      avatar: 'https://i.sstatic.net/l60Hf.png',
     },
   ];
 
@@ -70,39 +78,39 @@ const HomeScreen = () => {
   const clients = [
     {
       id: '1',
-      name: 'Sarah Johnson',
-      profession: 'Homeowner',
-      location: 'Downtown, NY',
+      name: 'Abigail Ola',
+      profession: 'Gardener',
+      location: 'Laguna, PH',
       rating: 4.8,
       jobs: 12,
-      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dXNlcnxlbnwwfHwwfHx8MA%3D%3D',
+      avatar: 'https://i.sstatic.net/l60Hf.png',
     },
     {
       id: '2',
-      name: 'Tech Solutions Inc',
-      profession: 'Business',
-      location: 'Midtown, NY',
+      name: 'Juan Dela Cruz',
+      profession: 'Construction Worker',
+      location: 'Antipolo City, PH',
       rating: 4.6,
       jobs: 24,
-      avatar: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTF8fHVzZXJ8ZW58MHx8MHx8fDA%3D',
+      avatar: 'https://i.sstatic.net/l60Hf.png',
     },
     {
       id: '3',
-      name: 'Robert Chen',
-      profession: 'Property Manager',
-      location: 'Brooklyn, NY',
+      name: 'Rossellah Domaoal',
+      profession: 'Tutor',
+      location: 'Makati City, PH',
       rating: 4.9,
       jobs: 8,
-      avatar: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mjh8fHVzZXJ8ZW58MHx8MHx8fDA%3D',
+      avatar: 'https://i.sstatic.net/l60Hf.png',
     },
     {
       id: '4',
-      name: 'Maria Garcia',
-      profession: 'Homeowner',
-      location: 'Queens, NY',
+      name: 'Cathrina Lapuz',
+      profession: 'Tutor',
+      location: 'Pangasinan, PH',
       rating: 4.7,
       jobs: 15,
-      avatar: 'https://images.unsplash.com/photo-1605993439219-9d09d2020fa5?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTN8fHVzZXJ8ZW58MHx8MHx8fDA%3D',
+      avatar: 'https://i.sstatic.net/l60Hf.png',
     },
   ];
 
@@ -175,6 +183,7 @@ const HomeScreen = () => {
 
   return (
     <View className="flex-1 bg-gray-50">
+      <StatusBar barStyle="light-content" backgroundColor="#6366f1" />
       <LinearGradient 
         colors={['#6366f1', '#8b5cf6']} 
         className="px-6 pt-12 pb-6 rounded-b-3xl"
@@ -195,10 +204,10 @@ const HomeScreen = () => {
         </View>
 
         {/* Search Bar */}
-        <View className="flex-row bg-white/20 rounded-xl px-4 py-3 mb-4">
-          <Search size={20} color="white" className="mr-2" />
+        <View className="flex-row items-center bg-white/20 rounded-2xl px-4 py-2.5 mb-4">
+          <Search size={20} color="white" className="opacity-70" />
           <TextInput
-            className="flex-1 text-white placeholder:text-white/70"
+            className="flex-1 text-white text-base ml-3"
             placeholder="Search jobs or clients..."
             placeholderTextColor="rgba(255,255,255,0.7)"
             value={searchQuery}
@@ -225,21 +234,20 @@ const HomeScreen = () => {
 
       <View className="flex-1 px-6 -mt-4">
         {/* Tab Selector */}
-        <View className="flex-row bg-white rounded-xl p-1 mb-6 shadow-sm">
+        <View className="flex-row bg-white rounded-xl p-1.5 mb-6 shadow-sm">
           <TouchableOpacity 
-            className={`flex-1 py-3 rounded-lg items-center ${
-              activeTab === 'jobs' ? 'bg-indigo-500' : ''
+            className={`flex-1 py-2.5 rounded-lg ${
+              jobsTab === 'jobs' ? 'bg-indigo-500' : 'bg-transparent'
             }`}
-            onPress={() => setActiveTab('jobs')}
+            onPress={() => setJobsTab('jobs')}
           >
-            <View className="flex-row items-center">
+            <View className="flex-row items-center justify-center space-x-2">
               <Briefcase 
-                size={18} 
-                color={activeTab === 'jobs' ? 'white' : '#6366f1'} 
-                className="mr-2" 
+                size={20} 
+                color={jobsTab === 'jobs' ? 'white' : '#6366f1'} 
               />
               <Text 
-                className={`font-bold ${activeTab === 'jobs' ? 'text-white' : 'text-indigo-600'}`}
+                className={`font-medium ${jobsTab === 'jobs' ? 'text-white' : 'text-indigo-600'}`}
               >
                 Jobs
               </Text>
@@ -247,19 +255,18 @@ const HomeScreen = () => {
           </TouchableOpacity>
           
           <TouchableOpacity 
-            className={`flex-1 py-3 rounded-lg items-center ${
-              activeTab === 'clients' ? 'bg-indigo-500' : ''
+            className={`flex-1 py-2.5 rounded-lg ${
+              jobsTab === 'clients' ? 'bg-indigo-500' : 'bg-transparent'
             }`}
-            onPress={() => setActiveTab('clients')}
+            onPress={() => setJobsTab('clients')}
           >
-            <View className="flex-row items-center">
+            <View className="flex-row items-center justify-center space-x-2">
               <Users 
-                size={18} 
-                color={activeTab === 'clients' ? 'white' : '#6366f1'} 
-                className="mr-2" 
+                size={20} 
+                color={jobsTab === 'clients' ? 'white' : '#6366f1'} 
               />
               <Text 
-                className={`font-bold ${activeTab === 'clients' ? 'text-white' : 'text-indigo-600'}`}
+                className={`font-medium ${jobsTab === 'clients' ? 'text-white' : 'text-indigo-600'}`}
               >
                 Clients
               </Text>
@@ -270,7 +277,7 @@ const HomeScreen = () => {
         {/* Filter Bar */}
         <View className="flex-row justify-between items-center mb-4">
           <Text className="text-gray-800 font-bold text-lg">
-            {activeTab === 'jobs' ? 'Available Jobs' : 'Top Clients'}
+            {jobsTab === 'jobs' ? 'Available Jobs' : 'Top Clients'}
           </Text>
           <TouchableOpacity className="flex-row items-center bg-white rounded-full px-4 py-2 shadow-sm">
             <Filter size={16} color="#6366f1" className="mr-1" />
@@ -280,10 +287,10 @@ const HomeScreen = () => {
 
         {/* Job/Client Listings */}
         <ScrollView 
-          className="flex-1" 
+          className="flex-1 mb-20" 
           showsVerticalScrollIndicator={false}
         >
-          {activeTab === 'jobs' ? (
+          {jobsTab === 'jobs' ? (
             <FlatList
               data={jobs}
               renderItem={renderJobItem}
@@ -306,4 +313,3 @@ const HomeScreen = () => {
   );
 };
 
-export default HomeScreen;

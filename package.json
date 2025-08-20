@@ -29,7 +29,8 @@
     "react-native": "0.79.5",
     "react-native-reanimated": "~3.17.4",
     "react-native-safe-area-context": "5.4.0",
-    "react-native-svg": "15.11.2"
+    "react-native-svg": "15.11.2",
+    "react-native-system-navigation-bar": "^2.6.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

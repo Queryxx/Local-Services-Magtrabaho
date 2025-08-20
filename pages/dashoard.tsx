@@ -23,11 +23,8 @@ import {
   Star,
   TrendingUp,
   Wallet,
-  Home,
-  Search,
-  MessageCircle,
-  UserCircle,
 } from "lucide-react-native";
+
 import { LinearGradient } from "expo-linear-gradient";
 import { Profile } from "../components/ui/profile";
 
@@ -54,7 +51,7 @@ export default function DashboardScreen() {
       rating: 4.8,
     },
     clientDetails: {
-      company: "Tech Solutions Inc.",
+      company: "Juan Dela Cruz",
       projects: 8,
       totalSpent: "₱45,750",
     },
@@ -246,7 +243,7 @@ export default function DashboardScreen() {
     </View>
   );
 
-  const [activeTab, setActiveTab] = useState('home');
+
 
   return (
     <View className="flex-1 bg-gray-50">
@@ -402,43 +399,6 @@ export default function DashboardScreen() {
           </View>
         </View>
       </ScrollView>
-
-      {/* Bottom Navigation */}
-      <View className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 pb-6 pt-4">
-        <View className="flex-row justify-between items-center">
-          <TouchableOpacity 
-            className="items-center" 
-            onPress={() => setActiveTab('home')}
-          >
-            <Home color={activeTab === 'home' ? '#6366f1' : '#9ca3af'} size={24} />
-            <Text className={`text-xs mt-1 ${activeTab === 'home' ? 'text-indigo-500 font-medium' : 'text-gray-500'}`}>Home</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity 
-            className="items-center"
-            onPress={() => setActiveTab('search')}
-          >
-            <Search color={activeTab === 'search' ? '#6366f1' : '#9ca3af'} size={24} />
-            <Text className={`text-xs mt-1 ${activeTab === 'search' ? 'text-indigo-500 font-medium' : 'text-gray-500'}`}>Search</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity 
-            className="items-center"
-            onPress={() => setActiveTab('messages')}
-          >
-            <MessageCircle color={activeTab === 'messages' ? '#6366f1' : '#9ca3af'} size={24} />
-            <Text className={`text-xs mt-1 ${activeTab === 'messages' ? 'text-indigo-500 font-medium' : 'text-gray-500'}`}>Messages</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity 
-            className="items-center"
-            onPress={() => setActiveTab('profile')}
-          >
-            <UserCircle color={activeTab === 'profile' ? '#6366f1' : '#9ca3af'} size={24} />
-            <Text className={`text-xs mt-1 ${activeTab === 'profile' ? 'text-indigo-500 font-medium' : 'text-gray-500'}`}>Profile</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
     </View>
   );
 }

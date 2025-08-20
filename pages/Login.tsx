@@ -114,7 +114,7 @@ export default function Login() {
       console.log('Remember me is checked - would save credentials securely here');
     }
     
-    navigation.replace('MainTabs'); // Using replace to prevent going back to login
+    navigation.replace('MainApp'); // Using replace to prevent going back to login
   };
 
   const handleRegister = () => {
