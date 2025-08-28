@@ -21,9 +21,10 @@ const MessagesScreen = () => {
   const [messages, setMessages] = useState([
     {
       id: '1',
-      user: 'Sarah Johnson',
-      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dXNlcnxlbnwwfHwwfHx8MA%3D%3D',
-      lastMessage: 'Thanks for confirming the appointment!',
+      user: 'Maria Santos',
+      type: 'Labandera',
+      avatar: 'https://i.sstatic.net/l60Hf.png',
+      lastMessage: 'Maraming salamat po sa pag-confirm ng appointment!',
       time: '10:30 AM',
       unread: 2,
       online: true
@@ -31,35 +32,39 @@ const MessagesScreen = () => {
     {
       id: '2',
       user: 'Juan Dela Cruz',
-      avatar: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTF8fHVzZXJ8ZW58MHx8MHx8fDA%3D',
-      lastMessage: 'We\'ve reviewed your proposal',
+      type: 'Construction Worker',
+      avatar: 'https://i.sstatic.net/l60Hf.png',
+      lastMessage: 'Boss, tapos na po yung pagre-repair ng bahay',
       time: 'Yesterday',
       unread: 0,
       online: false
     },
     {
       id: '3',
-      user: 'Robert Chen',
-      avatar: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mjh8fHVzZXJ8ZW58MHx8MHx8fDA%3D',
-      lastMessage: 'See you tomorrow at 2pm',
+      user: 'Angela Reyes',
+      type: 'Tutor',
+      avatar: 'https://i.sstatic.net/l60Hf.png',
+      lastMessage: 'Mamaya po ng 2pm ang tutorial ng Math',
       time: 'Yesterday',
       unread: 0,
       online: true
     },
     {
       id: '4',
-      user: 'Maria Garcia',
-      avatar: 'https://images.unsplash.com/photo-1605993439219-9d09d2020fa5?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTN8fHVzZXJ8ZW58MHx8MHx8fDA%3D',
-      lastMessage: 'Can you reschedule?',
+      user: 'Pedro Santos',
+      type: 'Farmer',
+      avatar: 'https://i.sstatic.net/l60Hf.png',
+      lastMessage: 'Pwede po ba bukas nalang ang pag-ani?',
       time: 'Wed',
       unread: 1,
       online: false
     },
     {
       id: '5',
-      user: 'Alex Morgan',
-      avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTd8fHVzZXJ8ZW58MHx8MHx8fDA%3D',
-      lastMessage: 'I\'ll send the documents shortly',
+      user: 'Ramon Garcia',
+      type: 'Driver',
+      avatar: 'https://i.sstatic.net/l60Hf.png',
+      lastMessage: 'Nasa airport na po ako, hinihintay ko na kayo',
       time: 'Tue',
       unread: 0,
       online: false
@@ -69,61 +74,68 @@ const MessagesScreen = () => {
   const contacts = [
     {
       id: '1',
-      name: 'Sarah Johnson',
-      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dXNlcnxlbnwwfHwwfHx8MA%3D%3D',
-      role: 'Client',
+      name: 'Maria Santos',
+      avatar: 'https://i.sstatic.net/l60Hf.png',
+      role: 'Labandera',
       online: true
     },
     {
       id: '2',
       name: 'Juan Dela Cruz',
-      avatar: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTF8fHVzZXJ8ZW58MHx8MHx8fDA%3D',
-      role: 'Business',
+      avatar: 'https://i.sstatic.net/l60Hf.png',
+      role: 'Construction Worker',
       online: false
     },
     {
       id: '3',
-      name: 'Robert Chen',
-      avatar: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mjh8fHVzZXJ8ZW58MHx8MHx8fDA%3D',
-      role: 'Client',
+      name: 'Angela Reyes',
+      avatar: 'https://i.sstatic.net/l60Hf.png',
+      role: 'Tutor',
       online: true
     },
     {
       id: '4',
-      name: 'Maria Garcia',
-      avatar: 'https://images.unsplash.com/photo-1605993439219-9d09d2020fa5?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTN8fHVzZXJ8ZW58MHx8MHx8fDA%3D',
-      role: 'Client',
+      name: 'Pedro Santos',
+      avatar: 'https://i.sstatic.net/l60Hf.png',
+      role: 'Farmer',
       online: false
     },
     {
       id: '5',
-      name: 'Alex Morgan',
-      avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTd8fHVzZXJ8ZW58MHx8MHx8fDA%3D',
-      role: 'Worker',
+      name: 'Ramon Garcia',
+      avatar: 'https://i.sstatic.net/l60Hf.png',
+      role: 'Driver',
       online: false
-    },
-    {
-      id: '6',
-      name: 'Emma Wilson',
-      avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzJ8fHVzZXJ8ZW58MHx8MHx8fDA%3D',
-      role: 'Worker',
-      online: true
     }
   ];
 
   const conversations = [
     {
       id: '1',
-      user: 'Sarah Johnson',
-      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dXNlcnxlbnwwfHwwfHx8MA%3D%3D',
+      user: 'Maria Santos',
+      avatar: 'https://i.sstatic.net/l60Hf.png',
       messages: [
-        { id: '1', text: 'Hi there! I need help with a plumbing issue.', time: '10:15 AM', sender: 'user' },
-        { id: '2', text: 'Sure, I can help with that. What seems to be the problem?', time: '10:16 AM', sender: 'me' },
-        { id: '3', text: 'The kitchen sink is leaking under the cabinet.', time: '10:17 AM', sender: 'user' },
-        { id: '4', text: 'I can come by this afternoon. Does 2pm work for you?', time: '10:20 AM', sender: 'me' },
-        { id: '5', text: 'That works perfectly. Thanks!', time: '10:22 AM', sender: 'user' },
-        { id: '6', text: 'Great! I\'ll see you then.', time: '10:23 AM', sender: 'me' },
-        { id: '7', text: 'Thanks for confirming the appointment!', time: '10:30 AM', sender: 'user' }
+        { id: '1', text: 'Magandang umaga po! Kailangan ko po ng tulong sa paglalaba.', time: '10:15 AM', sender: 'user' },
+        { id: '2', text: 'Magandang umaga din po! Pwede po akong tumulong. Ano po ang mga damit na lalabhan?', time: '10:16 AM', sender: 'me' },
+        { id: '3', text: 'May mga bed sheets at mga damit po ng mga bata.', time: '10:17 AM', sender: 'user' },
+        { id: '4', text: 'Pwede po akong pumunta mamaya ng hapon. Ok lang po ba ang 2pm?', time: '10:20 AM', sender: 'me' },
+        { id: '5', text: 'Opo, ok na ok po yun. Salamat po!', time: '10:22 AM', sender: 'user' },
+        { id: '6', text: 'Sige po, kita kits po mamaya!', time: '10:23 AM', sender: 'me' },
+        { id: '7', text: 'Maraming salamat po sa pag-confirm ng appointment!', time: '10:30 AM', sender: 'user' }
+      ]
+    },
+    {
+      id: '2',
+      user: 'Juan Dela Cruz',
+      avatar: 'https://i.sstatic.net/l60Hf.png',
+      messages: [
+        { id: '1', text: 'Boss, available po ako para sa construction work.', time: '9:45 AM', sender: 'user' },
+        { id: '2', text: 'May experience na po ako sa pagtatrabaho sa construction.', time: '9:46 AM', sender: 'user' },
+        { id: '3', text: 'Magkano po ang rate niyo kada araw?', time: '9:47 AM', sender: 'me' },
+        { id: '4', text: '800 pesos po kada araw, 8 oras po ang trabaho.', time: '9:48 AM', sender: 'user' },
+        { id: '5', text: 'Sige po, pwede po ba kayo magsimula bukas?', time: '9:50 AM', sender: 'me' },
+        { id: '6', text: 'Opo, pwede po. Anong oras po ako pupunta?', time: '9:51 AM', sender: 'user' },
+        { id: '7', text: '7am po, kitakits!', time: '9:52 AM', sender: 'me' }
       ]
     }
   ];
@@ -234,7 +246,7 @@ const MessagesScreen = () => {
           >
             <View className="flex-row items-center justify-between">
               <View className="flex-row items-center">
-                <TouchableOpacity onPress={() => setCurrentConversation(null)}>
+                <TouchableOpacity>
                   <Text className="text-white text-lg font-bold">Back</Text>
                 </TouchableOpacity>
                 <View className="ml-4">

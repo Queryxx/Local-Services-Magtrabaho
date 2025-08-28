@@ -31,69 +31,58 @@ export default function SearchArea() {
   const searchResults = [
     {
       id: '1',
-      name: 'Abigail Ola',
-      type: 'client',
+      name: 'Maria Santos',
+      type: 'Labandera',
       avatar: 'https://i.sstatic.net/l60Hf.png',
       location: 'Las Piñas, PH',
-      distance: '0.8 miles',
+      distance: '0.8 km',
       rating: 4.8,
-      jobsCompleted: 12,
+      jobsCompleted: 125,
       lastActive: '2 hours ago'
     },
     {
       id: '2',
       name: 'Juan Dela Cruz',
-      type: 'business',
+      type: 'Construction Worker',
       avatar: 'https://i.sstatic.net/l60Hf.png',
       location: 'Makati City, PH',
-      distance: '1.2 miles',
+      distance: '1.2 km',
       rating: 4.6,
-      jobsCompleted: 24,
+      jobsCompleted: 84,
       lastActive: '5 hours ago'
     },
     {
       id: '3',
-      name: 'Marvin Alingasa',
-      type: 'client',
+      name: 'Angela Reyes',
+      type: 'Tutor',
       avatar: 'https://i.sstatic.net/l60Hf.png',
       location: 'Marikina City, PH',
-      distance: '3.5 miles',
+      distance: '3.5 km',
       rating: 4.9,
-      jobsCompleted: 8,
+      jobsCompleted: 156,
       lastActive: '1 day ago'
     },
     {
       id: '4',
-      name: 'Cathrina Lapuz',
-      type: 'client',
+      name: 'Pedro Ramos',
+      type: 'Farmer',
       avatar: 'https://i.sstatic.net/l60Hf.png',
       location: 'Pasig City, PH',
-      distance: '5.2 miles',
+      distance: '5.2 km',
       rating: 4.7,
-      jobsCompleted: 15,
+      jobsCompleted: 92,
       lastActive: '1 day ago'
     },
     {
       id: '5',
-      name: 'Rossellah Bodano',
-      type: 'business',
+      name: 'Ramon Garcia',
+      type: 'Driver',
       avatar: 'https://i.sstatic.net/l60Hf.png',
       location: 'Quezon City, PH',
-      distance: '0.5 miles',
+      distance: '0.5 km',
       rating: 4.9,
-      jobsCompleted: 87,
+      jobsCompleted: 187,
       lastActive: '3 hours ago'
-    },
-    {
-      id: '6',
-      name: 'Juan Miguel Barbosa',
-      type: 'business',
-      avatar: 'https://i.sstatic.net/l60Hf.png',
-      location: 'Caloocan City, PH',
-      distance: '1.1 miles',
-      rating: 4.5,
-      jobsCompleted: 42,
-      lastActive: '6 hours ago'
     }
   ];
 
@@ -168,10 +157,10 @@ export default function SearchArea() {
         </View>
 
         {/* Search Bar */}
-        <View className="flex-row bg-white/20 rounded-xl px-4 py-3 mb-4">
-          <Search size={20} color="white" className="mr-2" />
+        <View className="flex-row items-center bg-white/20 rounded-xl px-4 py-3 mb-4">
+          <Search size={20} color="white" />
           <TextInput
-            className="flex-1 text-white placeholder:text-white/70"
+            className="flex-1 text-white placeholder:text-white/70 ml-2"
             placeholder="Search by name or location..."
             placeholderTextColor="rgba(255,255,255,0.7)"
             value={searchQuery}
@@ -197,16 +186,34 @@ export default function SearchArea() {
                 <Text className={selectedFilters.category === 'all' ? 'text-indigo-600' : 'text-white'}>All</Text>
               </TouchableOpacity>
               <TouchableOpacity 
-                className={`px-3 py-2 rounded-full mr-2 mb-2 ${selectedFilters.category === 'client' ? 'bg-white' : 'bg-white/30'}`}
-                onPress={() => setSelectedFilters({...selectedFilters, category: 'client'})}
+                className={`px-3 py-2 rounded-full mr-2 mb-2 ${selectedFilters.category === 'Labandera' ? 'bg-white' : 'bg-white/30'}`}
+                onPress={() => setSelectedFilters({...selectedFilters, category: 'Labandera'})}
               >
-                <Text className={selectedFilters.category === 'client' ? 'text-indigo-600' : 'text-white'}>Clients</Text>
+                <Text className={selectedFilters.category === 'Labandera' ? 'text-indigo-600' : 'text-white'}>Labandera</Text>
               </TouchableOpacity>
               <TouchableOpacity 
-                className={`px-3 py-2 rounded-full mr-2 mb-2 ${selectedFilters.category === 'business' ? 'bg-white' : 'bg-white/30'}`}
-                onPress={() => setSelectedFilters({...selectedFilters, category: 'business'})}
+                className={`px-3 py-2 rounded-full mr-2 mb-2 ${selectedFilters.category === 'Construction Worker' ? 'bg-white' : 'bg-white/30'}`}
+                onPress={() => setSelectedFilters({...selectedFilters, category: 'Construction Worker'})}
               >
-                <Text className={selectedFilters.category === 'business' ? 'text-indigo-600' : 'text-white'}>Businesses</Text>
+                <Text className={selectedFilters.category === 'Construction Worker' ? 'text-indigo-600' : 'text-white'}>Construction</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                className={`px-3 py-2 rounded-full mr-2 mb-2 ${selectedFilters.category === 'Tutor' ? 'bg-white' : 'bg-white/30'}`}
+                onPress={() => setSelectedFilters({...selectedFilters, category: 'Tutor'})}
+              >
+                <Text className={selectedFilters.category === 'Tutor' ? 'text-indigo-600' : 'text-white'}>Tutor</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                className={`px-3 py-2 rounded-full mr-2 mb-2 ${selectedFilters.category === 'Farmer' ? 'bg-white' : 'bg-white/30'}`}
+                onPress={() => setSelectedFilters({...selectedFilters, category: 'Farmer'})}
+              >
+                <Text className={selectedFilters.category === 'Farmer' ? 'text-indigo-600' : 'text-white'}>Farmer</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                className={`px-3 py-2 rounded-full mr-2 mb-2 ${selectedFilters.category === 'Driver' ? 'bg-white' : 'bg-white/30'}`}
+                onPress={() => setSelectedFilters({...selectedFilters, category: 'Driver'})}
+              >
+                <Text className={selectedFilters.category === 'Driver' ? 'text-indigo-600' : 'text-white'}>Driver</Text>
               </TouchableOpacity>
             </View>
             
@@ -234,16 +241,16 @@ export default function SearchArea() {
               <Text className={activeFilter === 'all' ? 'text-indigo-600 font-bold' : 'text-white'}>All</Text>
             </TouchableOpacity>
             <TouchableOpacity 
-              className={`px-3 py-1 rounded-full mr-1 ${activeFilter === 'client' ? 'bg-white' : ''}`}
-              onPress={() => setActiveFilter('client')}
+              className={`px-3 py-1 rounded-full mr-1 ${activeFilter === 'services' ? 'bg-white' : ''}`}
+              onPress={() => setActiveFilter('services')}
             >
-              <Text className={activeFilter === 'client' ? 'text-indigo-600 font-bold' : 'text-white'}>Clients</Text>
+              <Text className={activeFilter === 'services' ? 'text-indigo-600 font-bold' : 'text-white'}>Services</Text>
             </TouchableOpacity>
             <TouchableOpacity 
-              className={`px-3 py-1 rounded-full ${activeFilter === 'business' ? 'bg-white' : ''}`}
-              onPress={() => setActiveFilter('business')}
+              className={`px-3 py-1 rounded-full ${activeFilter === 'workers' ? 'bg-white' : ''}`}
+              onPress={() => setActiveFilter('workers')}
             >
-              <Text className={activeFilter === 'business' ? 'text-indigo-600 font-bold' : 'text-white'}>Businesses</Text>
+              <Text className={activeFilter === 'workers' ? 'text-indigo-600 font-bold' : 'text-white'}>Workers</Text>
             </TouchableOpacity>
           </View>
           

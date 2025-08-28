@@ -24,9 +24,9 @@ export default function MessageList() {
   const [messages, setMessages] = useState([
     {
       id: '1',
-      user: 'Juan Dela Cruz',
+      user: 'Maria Santos',
       avatar: 'https://i.sstatic.net/l60Hf.png',
-      lastMessage: 'Thanks for confirming the appointment!',
+      lastMessage: 'Maraming salamat po sa pag-confirm ng schedule!',
       time: '10:30 AM',
       unread: 2,
       online: true,
@@ -36,7 +36,7 @@ export default function MessageList() {
       id: '2',
       user: 'Juan Dela Cruz',
       avatar: 'https://i.sstatic.net/l60Hf.png',
-      lastMessage: 'We\'ve reviewed your proposal',
+      lastMessage: 'Boss, pwede po magsimula bukas?',
       time: 'Yesterday',
       unread: 0,
       online: false,
@@ -44,9 +44,9 @@ export default function MessageList() {
     },
     {
       id: '3',
-    user: 'Marvin Alingasa',
+      user: 'Angela Reyes',
       avatar: 'https://i.sstatic.net/l60Hf.png',
-      lastMessage: 'See you tomorrow at 2pm',
+      lastMessage: 'Mamaya po ng 2pm ang tutorial.',
       time: 'Yesterday',
       unread: 0,
       online: true,
@@ -54,9 +54,9 @@ export default function MessageList() {
     },
     {
       id: '4',
-      user: 'Cathrina Lapuz',
+      user: 'Pedro Santos',
       avatar: 'https://i.sstatic.net/l60Hf.png',
-      lastMessage: 'Can you reschedule?',
+      lastMessage: 'Pwede po ba bukas ang ani?',
       time: 'Wed',
       unread: 1,
       online: false,
@@ -64,22 +64,12 @@ export default function MessageList() {
     },
     {
       id: '5',
-      user: 'Rosselah Bodano',
-      avatar: 'https://i.sstatic.net/l60Hf.png',
-      lastMessage: 'I\'ll send the documents shortly',
+      user: 'Coco Martinez',
+      avatar: 'https://i.ytimg.com/vi/hGNLYgmMq1c/hqdefault.jpg',
+      lastMessage: 'Sir, tapos na po.',
       time: 'Tue',
       unread: 0,
       online: false,
-      isTyping: false
-    },
-    {
-      id: '6',
-      user: 'Abigail Ola',
-      avatar: 'https://i.sstatic.net/l60Hf.png',
-      lastMessage: 'Meeting notes attached',
-      time: 'Mon',
-      unread: 0,
-      online: true,
       isTyping: false
     }
   ]);
@@ -87,61 +77,68 @@ export default function MessageList() {
   const contacts = [
     {
       id: '1',
-      name: 'Juan Dela Cruz',
+      name: 'Maria Santos',
       avatar: 'https://i.sstatic.net/l60Hf.png',
-      role: 'Client',
+      role: 'Labandera',
       online: true
     },
     {
       id: '2',
       name: 'Juan Dela Cruz',
       avatar: 'https://i.sstatic.net/l60Hf.png',
-      role: 'Worker',
+      role: 'Construction Worker',
       online: false
     },
     {
       id: '3',
-      name: 'Marvin Alingasa',
+      name: 'Angela Reyes',
       avatar: 'https://i.sstatic.net/l60Hf.png',
-      role: 'Client',
+      role: 'Tutor',
       online: true
     },
     {
       id: '4',
-      name: 'Abigail Ola',
+      name: 'Pedro Santos',
       avatar: 'https://i.sstatic.net/l60Hf.png',
-      role: 'Client',
+      role: 'Farmer',
       online: false
     },
     {
       id: '5',
-      name: 'Mark Daluson',
+      name: 'Ramon Garcia',
       avatar: 'https://i.sstatic.net/l60Hf.png',
-      role: 'Worker',
+      role: 'Driver',
       online: false
-    },
-    {
-      id: '6',
-      name: 'Cathrina Lapuz',
-      avatar: 'https://i.sstatic.net/l60Hf.png',
-      role: 'Worker',
-      online: true
     }
   ];
 
   const conversations: Conversation[] = [
     {
       id: '1',
-      user: 'Abigail Ola',
+      user: 'Maria Santos',
       avatar: 'https://i.sstatic.net/l60Hf.png',
       messages: [
-        { id: '1', text: 'Hi there! I need help with a plumbing issue.', time: '10:15 AM', sender: 'user' as const },
-        { id: '2', text: 'Sure, I can help with that. What seems to be the problem?', time: '10:16 AM', sender: 'me' as const },
-        { id: '3', text: 'The kitchen sink is leaking under the cabinet.', time: '10:17 AM', sender: 'user' as const },
-        { id: '4', text: 'I can come by this afternoon. Does 2pm work for you?', time: '10:20 AM', sender: 'me' as const },
-        { id: '5', text: 'That works perfectly. Thanks!', time: '10:22 AM', sender: 'user' as const },
-        { id: '6', text: 'Great! I\'ll see you then.', time: '10:23 AM', sender: 'me' as const },
-        { id: '7', text: 'Thanks for confirming the appointment!', time: '10:30 AM', sender: 'user' as const }
+        { id: '1', text: 'Magandang umaga po! Kailangan ko po ng tulong sa paglalaba.', time: '10:15 AM', sender: 'user' as const },
+        { id: '2', text: 'Magandang umaga din po! Pwede po akong tumulong. Ano po ang mga dapat labhan?', time: '10:16 AM', sender: 'me' as const },
+        { id: '3', text: 'May mga bed sheets at mga damit po ng mga bata.', time: '10:17 AM', sender: 'user' as const },
+        { id: '4', text: 'Pwede po akong pumunta mamaya ng hapon. Ok lang po ba ang 2pm?', time: '10:20 AM', sender: 'me' as const },
+        { id: '5', text: 'Opo, ok na ok po yun. Salamat po!', time: '10:22 AM', sender: 'user' as const },
+        { id: '6', text: 'Sige po, kita kits po mamaya!', time: '10:23 AM', sender: 'me' as const },
+        { id: '7', text: 'Maraming salamat po sa pag-confirm ng schedule!', time: '10:30 AM', sender: 'user' as const }
+      ]
+    },
+    {
+      id: '2',
+      user: 'Juan Dela Cruz',
+      avatar: 'https://i.sstatic.net/l60Hf.png',
+      messages: [
+        { id: '1', text: 'Boss, available po ako para sa construction work.', time: '9:45 AM', sender: 'user' as const },
+        { id: '2', text: 'May experience na po ako sa pagtatrabaho sa construction.', time: '9:46 AM', sender: 'user' as const },
+        { id: '3', text: 'Magkano po ang rate niyo kada araw?', time: '9:47 AM', sender: 'me' as const },
+        { id: '4', text: '800 pesos po kada araw, 8 oras po ang trabaho.', time: '9:48 AM', sender: 'user' as const },
+        { id: '5', text: 'Sige po, pwede po ba kayo magsimula bukas?', time: '9:50 AM', sender: 'me' as const },
+        { id: '6', text: 'Opo, pwede po. Anong oras po ako pupunta?', time: '9:51 AM', sender: 'user' as const },
+        { id: '7', text: '7am po, kitakits!', time: '9:52 AM', sender: 'me' as const }
       ]
     }
   ];
@@ -353,10 +350,10 @@ export default function MessageList() {
             </View>
 
             {/* Search Bar */}
-            <View className="flex-row bg-white/20 rounded-xl px-4 py-3 mb-4">
-              <Search size={20} color="white" className="mr-2" />
+            <View className="flex-row items-center bg-white/20 rounded-xl px-4 py-3 mb-4">
+              <Search size={20} color="white" />
               <TextInput
-                className="flex-1 text-white placeholder:text-white/70"
+                className="flex-1 text-white placeholder:text-white/70 ml-2"
                 placeholder="Search messages..."
                 placeholderTextColor="rgba(255,255,255,0.7)"
                 value={searchQuery}

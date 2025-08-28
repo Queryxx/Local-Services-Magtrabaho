@@ -6,9 +6,10 @@ import Introduction from '../components/Introduction';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { RootStackParamList } from '../types/navigation';
 import { LinearGradient } from 'expo-linear-gradient';
-import { User, Lock, Mail, Phone, Eye, EyeOff, CheckCircle, Upload, Camera as CameraIcon, Calendar, Briefcase, Users } from 'lucide-react-native';
+import { User, Lock, Mail, Phone, Eye, EyeOff, CheckCircle, Upload, Camera as CameraIcon, Calendar, Briefcase, Users, Home } from 'lucide-react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
+import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
   const navigation = useNavigation<any>();
@@ -33,12 +34,16 @@ export default function Login() {
   const [lastName, setLastName] = useState('');
   const [birthdate, setBirthdate] = useState('');
   const [date, setDate] = useState(new Date());
+  const [address, setAddress] = useState('');
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [role, setRole] = useState<'worker' | 'client' | ''>('');
   const [registerEmail, setRegisterEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [registerPassword, setRegisterPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [step, setStep] = useState(1);
   const [faceImages, setFaceImages] = useState({ front: '', left: '', right: '' });
   const [idImage, setIdImage] = useState('');
@@ -100,27 +105,51 @@ export default function Login() {
     });
   };
 
+  const { setUserType } = useAuth();
+  
   const handleLogin = () => {
     if (!loginEmail || !loginPassword) {
       Alert.alert('Error', 'Please fill in all fields');
       return;
     }
-    // Here you would typically make an API call to verify credentials
-    // For now, we'll just simulate a successful login
-    
-    // If remember me is checked, you would typically store the credentials securely
-    if (rememberMe) {
-      // In a real app, use secure storage like EncryptedStorage or Keychain
-      console.log('Remember me is checked - would save credentials securely here');
+
+    // Check specific email and password combinations
+    console.log('Attempting login with:', loginEmail, loginPassword); // Debug log
+    if (loginEmail.toLowerCase() === 'domaoalj11@gmail.com' && loginPassword === 'johnjohn') {
+      if (rememberMe) {
+        // In a real app, use secure storage like EncryptedStorage or Keychain
+        console.log('Remember me is checked - would save credentials securely here');
+      }
+      setUserType('worker');  // Changed to worker type for domaoalj11@gmail.com
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'MainApp' }],
+      });
+    } else if (loginEmail.toLowerCase() === 'janggisdump@gmail.com' && loginPassword === 'jrix123') {
+      if (rememberMe) {
+        // In a real app, use secure storage like EncryptedStorage or Keychain
+        console.log('Remember me is checked - would save credentials securely here');
+      }
+      setUserType('client');  // Changed to client type for janggisdump@gmail.com
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'MainApp' }],
+      });
+    } else {
+      Alert.alert('Error', 'Invalid email or password');
+      console.log('Login failed: Invalid credentials'); // Debug log
     }
-    
-    navigation.replace('MainApp'); // Using replace to prevent going back to login
   };
 
   const handleRegister = () => {
     if (step === 1) {
-      if (!firstName || !lastName || !birthdate || !role || !registerEmail || !phone || !registerPassword || !confirmPassword) {
+      if (!firstName || !lastName || !birthdate || !role || !registerEmail || !phone || !address || !registerPassword || !confirmPassword) {
         Alert.alert('Error', 'Please fill in all fields');
+        return;
+      }
+
+      if (!termsAccepted) {
+        Alert.alert('Error', 'Please accept the Terms of Service and Privacy Policy to continue');
         return;
       }
       
@@ -594,6 +623,19 @@ export default function Login() {
                     />
                   </View>
                 </View>
+
+                <View className="mb-4">
+                  <View className="flex-row items-center bg-gray-100 rounded-xl px-4 mb-1">
+                    <Home color="#6366f1" size={20} />
+                    <TextInput
+                      className="flex-1 py-4 px-3 text-gray-700"
+                      placeholder="Complete Address"
+                      value={address}
+                      onChangeText={setAddress}
+                      multiline
+                    />
+                  </View>
+                </View>
                 
                 <View className="mb-4">
                   <View className="flex-row items-center bg-gray-100 rounded-xl px-4 mb-1">
@@ -636,6 +678,120 @@ export default function Login() {
                     </TouchableOpacity>
                   </View>
                 </View>
+
+                {/* Terms and Conditions Agreement */}
+                <View className="mb-6">
+                  <View className="flex-row items-start">
+                    <TouchableOpacity
+                      onPress={() => setTermsAccepted(!termsAccepted)}
+                      className="flex-row items-start"
+                    >
+                      <View className={`w-5 h-5 rounded-md border mt-1 ${termsAccepted ? 'bg-indigo-500 border-indigo-500' : 'border-gray-300'} items-center justify-center mr-2`}>
+                        {termsAccepted && <CheckCircle color="white" size={14} />}
+                      </View>
+                    </TouchableOpacity>
+                    <Text className="text-gray-600 flex-1">
+                      I agree to the{' '}
+                      <TouchableOpacity onPress={() => setShowTermsModal(true)}>
+                        <Text className="text-indigo-500 font-medium underline">Terms of Service</Text>
+                      </TouchableOpacity>
+                      {' '}and{' '}
+                      <TouchableOpacity onPress={() => setShowPrivacyModal(true)}>
+                        <Text className="text-indigo-500 font-medium underline">Privacy Policy</Text>
+                      </TouchableOpacity>
+                    </Text>
+                  </View>
+                </View>
+
+                {/* Terms of Service Modal */}
+                {showTermsModal && (
+                  <View className="absolute top-0 left-0 right-0 bottom-0 bg-black/50 justify-center items-center">
+                    <View className="bg-white rounded-2xl p-6 m-4 max-h-[80%] w-[90%]">
+                      <Text className="text-2xl font-bold text-gray-800 mb-4">Terms of Service</Text>
+                      <ScrollView className="mb-4">
+                        <Text className="text-gray-600 mb-4">
+                          Welcome to Magtrabaho! By using our service, you agree to these terms:
+                        </Text>
+                        
+                        <Text className="font-bold text-gray-700 mb-2">1. User Agreement</Text>
+                        <Text className="text-gray-600 mb-4">
+                          By accessing and using Magtrabaho, you accept and agree to be bound by the terms and provisions of this agreement.
+                        </Text>
+
+                        <Text className="font-bold text-gray-700 mb-2">2. Account Registration</Text>
+                        <Text className="text-gray-600 mb-4">
+                          Users must provide accurate, complete information and keep their account information updated. Users are responsible for maintaining the security of their account.
+                        </Text>
+
+                        <Text className="font-bold text-gray-700 mb-2">3. Service Rules</Text>
+                        <Text className="text-gray-600 mb-4">
+                          Users agree not to engage in any activity that interferes with or disrupts the services or servers and networks connected to the services.
+                        </Text>
+
+                        <Text className="font-bold text-gray-700 mb-2">4. User Conduct</Text>
+                        <Text className="text-gray-600 mb-4">
+                          Users must follow all applicable local, state, national, and international laws and regulations.
+                        </Text>
+
+                        <Text className="font-bold text-gray-700 mb-2">5. Service Modifications</Text>
+                        <Text className="text-gray-600 mb-4">
+                          We reserve the right to modify or discontinue the service at any time, with or without notice.
+                        </Text>
+                      </ScrollView>
+                      <TouchableOpacity
+                        className="bg-indigo-500 rounded-xl py-3 items-center"
+                        onPress={() => setShowTermsModal(false)}
+                      >
+                        <Text className="text-white font-bold">Close</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                )}
+
+                {/* Privacy Policy Modal */}
+                {showPrivacyModal && (
+                  <View className="absolute top-0 left-0 right-0 bottom-0 bg-black/50 justify-center items-center">
+                    <View className="bg-white rounded-2xl p-6 m-4 max-h-[80%] w-[90%]">
+                      <Text className="text-2xl font-bold text-gray-800 mb-4">Privacy Policy</Text>
+                      <ScrollView className="mb-4">
+                        <Text className="text-gray-600 mb-4">
+                          Your privacy is important to us. This policy explains how we handle your data:
+                        </Text>
+
+                        <Text className="font-bold text-gray-700 mb-2">1. Information Collection</Text>
+                        <Text className="text-gray-600 mb-4">
+                          We collect information you provide directly, including personal details, identification documents, and face recognition data for security purposes.
+                        </Text>
+
+                        <Text className="font-bold text-gray-700 mb-2">2. Data Usage</Text>
+                        <Text className="text-gray-600 mb-4">
+                          We use your information to provide and improve our services, verify your identity, and ensure platform security.
+                        </Text>
+
+                        <Text className="font-bold text-gray-700 mb-2">3. Data Protection</Text>
+                        <Text className="text-gray-600 mb-4">
+                          We implement appropriate security measures to protect your personal information from unauthorized access or disclosure.
+                        </Text>
+
+                        <Text className="font-bold text-gray-700 mb-2">4. Information Sharing</Text>
+                        <Text className="text-gray-600 mb-4">
+                          We do not sell your personal information. We only share your information as described in this policy and with your consent.
+                        </Text>
+
+                        <Text className="font-bold text-gray-700 mb-2">5. Your Rights</Text>
+                        <Text className="text-gray-600 mb-4">
+                          You have the right to access, correct, or delete your personal information at any time.
+                        </Text>
+                      </ScrollView>
+                      <TouchableOpacity
+                        className="bg-indigo-500 rounded-xl py-3 items-center"
+                        onPress={() => setShowPrivacyModal(false)}
+                      >
+                        <Text className="text-white font-bold">Close</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                )}
               </>
             )}
             

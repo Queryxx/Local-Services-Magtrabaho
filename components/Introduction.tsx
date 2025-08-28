@@ -161,7 +161,7 @@ export default function Introduction({ onComplete }: { onComplete: () => void })
             { opacity: taglineFadeAnim }
           ]}
         >
-          Your Gateway to Professional Services
+          Your Gateway to Local Services
         </Animated.Text>
       </Animated.View>
     </LinearGradient>
