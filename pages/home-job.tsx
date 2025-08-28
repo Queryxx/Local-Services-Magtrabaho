@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Image, FlatList, ActivityIndicator, Animated } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import axios from 'axios';
 import { 
   Users, 
   MapPin, 
@@ -21,6 +22,104 @@ const JobTypesScreen = () => {
   const [isMatching, setIsMatching] = useState(false);
   const [currentMatchStep, setCurrentMatchStep] = useState(0);
   const [scaleAnim] = useState(new Animated.Value(1));
+  const [matchedApplicants, setMatchedApplicants] = useState<any[]>([]);
+
+  const sendData = async (jobType: string) => {
+    const payload = {
+      service: {
+        service: jobType.toLowerCase(),
+        description: "Need help with " + jobType.toLowerCase(),
+        location: "Balais, Lagangilang, Abra",
+        budget: 1000,
+        date: "2025-01-01",
+        time: "10:00",
+        status: "pending",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      },
+      applicants: applicants.map(applicant => ({
+        name: applicant.name,
+        email: `${applicant.name.toLowerCase().replace(' ', '.')}@example.com`,
+        phone: "09123456789",
+        address: "Balais, Lagangilang, Abra",
+        expertise: jobType.toLowerCase(),
+        rating: applicant.rating,
+        skills: applicant.skills,
+        experience: applicant.experience,
+        reviews: [
+          { rating: applicant.rating, comment: "Great work!", created_at: "2025-01-01" }
+        ]
+      }))
+    };
+
+    try {
+      console.log("Sending request to server with payload:", JSON.stringify(payload, null, 2));
+      const response = await axios.post("http://192.168.0.111:5000/api/best-match", payload, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        timeout: 10000, // 10 second timeout
+      });
+      console.log("Response from Flask:", response.data);
+      
+      if (response.data && response.data.data) {
+        const { best_match, ranking, recommendation } = response.data.data;
+        
+        // Transform the ranking data to match your applicant interface
+        const transformedData = ranking.map((item: any) => ({
+          id: item.email,
+          name: item.name,
+          email: item.email,
+          avatar: 'https://i.ytimg.com/vi/hGNLYgmMq1c/hqdefault.jpg',
+          matchScore: Math.round(item.score * 10), // Convert score to percentage
+          rating: 4.5,
+          experience: '3 years',
+          skills: [...(item.pros || []), item.factor_considered].filter(Boolean),
+          pros: item.pros || [],
+          cons: item.cons || [],
+          factor: item.factor_considered,
+          isBestMatch: item.email === best_match.email,
+          appliedDate: 'Just now',
+          reason: item.email === best_match.email ? best_match.reason : undefined
+        }));
+
+        setMatchedApplicants(transformedData);
+        return { success: true, recommendation, best_match };
+      }
+      return false;
+    } catch (error) {
+      const err = error as any;
+      console.error("Error details:", {
+        message: err?.message || "Unknown error",
+        response: err?.response?.data,
+        status: err?.response?.status,
+        headers: err?.response?.headers
+      });
+      
+      if (axios.isAxiosError(error)) {
+        if (error.code === 'ECONNREFUSED') {
+          console.error("Could not connect to the server. Make sure the server is running at http://192.168.0.111:5000");
+        } else if (error.code === 'ETIMEDOUT') {
+          console.error("Request timed out. Server took too long to respond.");
+        } else if (error.response) {
+          // The request was made and the server responded with a status code
+          console.error(`Server responded with status ${error.response.status}`);
+          console.error("Server response data:", error.response.data);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.error("No response received from server");
+        }
+      }
+      
+      // Fallback to mock data if API fails
+      const fallbackData = applicants.map((applicant, index) => ({
+        ...applicant,
+        matchScore: Math.floor(Math.random() * 20 + 80),
+      }));
+      setMatchedApplicants(fallbackData);
+      return true;
+    }
+  };
   
   const matchingSteps = [
     "Analyzing job requirements...",
@@ -36,10 +135,6 @@ const JobTypesScreen = () => {
         setCurrentMatchStep((prev) => {
           if (prev >= matchingSteps.length - 1) {
             clearInterval(interval);
-            setTimeout(() => {
-              setIsMatching(false);
-              setShowAIMatch(true);
-            }, 1000);
             return prev;
           }
           return prev + 1;
@@ -174,6 +269,53 @@ const JobTypesScreen = () => {
 
   const [selectedJob, setSelectedJob] = useState<typeof jobTypes[0] | null>(null);
 
+  const [recommendation, setRecommendation] = useState<string>("");
+  const [bestMatchReason, setBestMatchReason] = useState<string>("");
+
+  const handleAIMatch = async () => {
+    if (!selectedJob) return;
+    
+    try {
+      setCurrentMatchStep(0);
+      setIsMatching(true);
+      setShowAIMatch(false);
+      setRecommendation("");
+      setBestMatchReason("");
+      
+      // Start the API call
+      const result = await sendData(selectedJob.title);
+      
+      // Wait for the animation to complete (5 steps * 1 second each)
+      await new Promise(resolve => setTimeout(resolve, matchingSteps.length * 1000));
+      
+      if (result && typeof result === 'object' && 'success' in result) {
+        setRecommendation(result.recommendation);
+        setBestMatchReason(result.best_match.reason);
+        setShowAIMatch(true);
+      } else {
+        console.error("Failed to get matches from API");
+        // Fallback to mock data
+        const fallbackData = applicants.map(applicant => ({
+          ...applicant,
+          matchScore: Math.floor(Math.random() * 20 + 80),
+        }));
+        setMatchedApplicants(fallbackData);
+        setShowAIMatch(true);
+      }
+    } catch (error) {
+      console.error("Error during AI matching:", error);
+      // Fallback to mock data on error
+      const fallbackData = applicants.map(applicant => ({
+        ...applicant,
+        matchScore: Math.floor(Math.random() * 20 + 80),
+      }));
+      setMatchedApplicants(fallbackData);
+      setShowAIMatch(true);
+    } finally {
+      setIsMatching(false);
+    }
+  };
+
   const renderJobTypeCard = ({ item }: { item: typeof jobTypes[0] }) => (
     <TouchableOpacity 
       className="bg-white rounded-2xl overflow-hidden mb-5 shadow-sm border border-gray-100"
@@ -239,7 +381,7 @@ const JobTypesScreen = () => {
       <View className="mt-3">
         <Text className="text-gray-700 font-medium mb-1">Skills:</Text>
         <View className="flex-row flex-wrap">
-          {item.skills.map((skill, index) => (
+          {item.skills.map((skill: string, index: number) => (
             <View key={index} className="bg-indigo-100 px-2 py-1 rounded-full mr-2 mb-2">
               <Text className="text-indigo-700 text-xs">{skill}</Text>
             </View>
@@ -262,6 +404,7 @@ const JobTypesScreen = () => {
                 setSelectedJob(null);
                 setShowAIMatch(false);
                 setIsMatching(false);
+                setMatchedApplicants([]);
               }}
               className="flex-row items-center bg-white px-3 py-2 rounded-lg shadow-sm"
             >
@@ -305,13 +448,10 @@ const JobTypesScreen = () => {
             </View>
           </View>
 
-          {!showAIMatch && (
+          {!showAIMatch && !isMatching && (
             <TouchableOpacity 
               className="bg-indigo-500 w-full py-3 rounded-xl mb-4 flex-row justify-center items-center"
-              onPress={() => {
-                setCurrentMatchStep(0);
-                setIsMatching(true);
-              }}
+              onPress={handleAIMatch}
             >
               <View className="flex-row items-center">
                 <Users size={20} color="white" className="mr-2" />
@@ -356,32 +496,26 @@ const JobTypesScreen = () => {
             </View>
           ) : showAIMatch ? (
             <>
-              <View className="bg-indigo-50 p-4 rounded-xl mb-4">
-                <Text className="text-indigo-800 font-bold text-lg mb-2">AI-Matched Workers</Text>
-                <Text className="text-indigo-600 mb-4">Workers are matched based on skills, experience, and job requirements</Text>
-                
-                <View className="flex-row flex-wrap">
-                  <View className="bg-white p-2 rounded-lg mb-2 mr-2">
-                    <Text className="text-indigo-600 font-medium">Skills Match</Text>
-                  </View>
-                  <View className="bg-white p-2 rounded-lg mb-2 mr-2">
-                    <Text className="text-indigo-600 font-medium">Experience Level</Text>
-                  </View>
-                  <View className="bg-white p-2 rounded-lg mb-2">
-                    <Text className="text-indigo-600 font-medium">Location</Text>
-                  </View>
-                </View>
-              </View>
-
-              <Text className="text-gray-800 font-bold text-lg mb-4">All Matched Applicants</Text>
-
               <FlatList
-                data={applicants.map(applicant => ({
-                  ...applicant,
-                  matchScore: Math.floor(Math.random() * 20 + 80), // Random score between 80-100
-                }))}
+                data={matchedApplicants}
+                ListHeaderComponent={() => (
+                  <>
+                    <View className="bg-indigo-50 p-4 rounded-xl mb-4">
+                      <Text className="text-indigo-800 font-bold text-lg mb-2">AI Match Results</Text>
+                      {recommendation && (
+                        <View className="bg-white p-4 rounded-lg mb-4">
+                          <Text className="text-indigo-800 font-bold mb-2">Recommendation</Text>
+                          <Text className="text-gray-700">{recommendation}</Text>
+                        </View>
+                      )}
+                      <Text className="text-indigo-600 mb-4">Workers are ranked based on multiple factors including skills, experience, and location</Text>
+                    </View>
+
+                    <Text className="text-gray-800 font-bold text-lg mb-4">All Matched Applicants</Text>
+                  </>
+                )}
                 renderItem={({ item }) => (
-                  <View className="bg-white rounded-xl p-4 mb-4 shadow-sm border border-gray-100">
+                  <View className={`bg-white rounded-xl p-4 mb-4 shadow-sm border ${item.isBestMatch ? 'border-indigo-500' : 'border-gray-100'}`}>
                     <View className="flex-row justify-between items-start">
                       <View className="flex-row flex-1">
                         <Image 
@@ -389,7 +523,14 @@ const JobTypesScreen = () => {
                           className="w-12 h-12 rounded-full mr-3" 
                         />
                         <View className="flex-1">
-                          <Text className="font-bold text-gray-800">{item.name}</Text>
+                          <View className="flex-row items-center">
+                            <Text className="font-bold text-gray-800">{item.name}</Text>
+                            {item.isBestMatch && (
+                              <View className="bg-indigo-100 px-2 py-1 rounded-full ml-2">
+                                <Text className="text-indigo-700 text-xs font-medium">Best Match</Text>
+                              </View>
+                            )}
+                          </View>
                           <View className="flex-row items-center mt-1">
                             <Star size={14} color="#fbbf24" fill="#fbbf24" className="mr-1" />
                             <Text className="text-gray-700">{item.rating}</Text>
@@ -398,8 +539,13 @@ const JobTypesScreen = () => {
                           </View>
                           <View className="flex-row items-center mt-2">
                             <View className="bg-green-100 px-2 py-1 rounded-full">
-                              <Text className="text-green-700 text-xs font-medium">{item.matchScore}% Match</Text>
+                              <Text className="text-green-700 text-xs font-medium">Match Score: {item.matchScore}%</Text>
                             </View>
+                            {item.factor && (
+                              <View className="bg-blue-100 px-2 py-1 rounded-full ml-2">
+                                <Text className="text-blue-700 text-xs font-medium">{item.factor}</Text>
+                              </View>
+                            )}
                           </View>
                         </View>
                       </View>
@@ -408,16 +554,35 @@ const JobTypesScreen = () => {
                       </TouchableOpacity>
                     </View>
                     
+                    {item.reason && (
+                      <View className="mt-3 bg-indigo-50 p-3 rounded-lg">
+                        <Text className="text-indigo-700 text-sm">{item.reason}</Text>
+                      </View>
+                    )}
+                    
                     <View className="mt-3">
-                      <Text className="text-gray-700 font-medium mb-1">Matched Skills:</Text>
+                      <Text className="text-gray-700 font-medium mb-1">Pros:</Text>
                       <View className="flex-row flex-wrap">
-                        {item.skills.map((skill, index) => (
-                          <View key={index} className="bg-indigo-100 px-2 py-1 rounded-full mr-2 mb-2">
-                            <Text className="text-indigo-700 text-xs">{skill}</Text>
+                        {item.pros.map((pro: string, index: number) => (
+                          <View key={index} className="bg-green-100 px-2 py-1 rounded-full mr-2 mb-2">
+                            <Text className="text-green-700 text-xs">{pro}</Text>
                           </View>
                         ))}
                       </View>
                     </View>
+                    
+                    {item.cons.length > 0 && (
+                      <View className="mt-2">
+                        <Text className="text-gray-700 font-medium mb-1">Cons:</Text>
+                        <View className="flex-row flex-wrap">
+                          {item.cons.map((con: string, index: number) => (
+                            <View key={index} className="bg-red-100 px-2 py-1 rounded-full mr-2 mb-2">
+                              <Text className="text-red-700 text-xs">{con}</Text>
+                            </View>
+                          ))}
+                        </View>
+                      </View>
+                    )}
                   </View>
                 )}
                 keyExtractor={(item) => item.id}
@@ -478,7 +643,7 @@ const JobTypesScreen = () => {
         {/* Filter Tabs */}
         <View className="flex-row bg-white rounded-xl p-2 mb-6 shadow-sm">
           <TouchableOpacity 
-            className={`flex-1 items-center py-2 rounded-lg ${activeTab === 'all' ? 'bg-indigo-500' : ''}`}
+            className={`flex-1 items-center py-2 rounded-lg ${activeTab === 'all' || 'all' ? 'bg-indigo-500' : ''}`}
             onPress={() => setActiveTab('all')}
           >
             <Text className={`font-medium ${activeTab === 'all' ? 'text-white' : 'text-gray-700'}`}>All Jobs</Text>
